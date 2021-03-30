@@ -1,6 +1,7 @@
 const { v4 } = require("uuid");
 const Sequelize = require('sequelize');
 const { sequelize } = require("../seq");
+const { tempData } = require('./template')
 
 const Project = sequelize.define(
   "project",
@@ -16,7 +17,7 @@ const Project = sequelize.define(
   }
 );
 
-const create = async (data) => {
+const create = async (data = tempData) => {
   const id = v4();
   data.id = id;
   // await query(

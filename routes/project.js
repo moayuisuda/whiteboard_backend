@@ -1,11 +1,12 @@
 const router = require("koa-router")();
-const { Project } = require("../model/project");
-const { User } = require("../model/user");
+const project = require("../model/project");
+const { Project } = project;
+const user = require("../model/user");
+const { User } = user;
 
 router.get("/data/:id", async (ctx, next) => {
   let id = ctx.params.id;
 
-  // let res = await query(`SELECT * FROM project WHERE id = "${id}"`);
   const data = await Project.findOne({
     where: {
       id,
@@ -19,7 +20,6 @@ router.get("/data/:id", async (ctx, next) => {
 
 router.get("/project-list", async (ctx, next) => {
   let id = ctx.req.decoded.id;
-  // let projects = await query(`SELECT projects FROM user WHERE id = "${id}"`);
 
   const user = await User.findOne({
     where: {
@@ -28,19 +28,71 @@ router.get("/project-list", async (ctx, next) => {
     raw: true,
   });
   let idList = user.projects.split(",");
-  // let res = await query(`
-  // SELECT projects FROM user WHERE id = "${id}"
-  // ${list}
-  // `);
   const projectList = await Project.findAll({
     where: {
       id: [...idList],
     },
     raw: true,
   });
-  console.log("list----------", projectList);
 
   ctx.body = projectList;
+
+  await next();
+});
+
+router.post("/add", async (ctx, next) => {
+  let id = ctx.req.decoded.id;
+
+  const user = await User.findOne({
+    where: {
+      id,
+    },
+    raw: true,
+  });
+  let projects = user.projects.split(",");
+
+  const newProjectId = await project.create();
+  projects.push(newProjectId);
+  const newProjectsStr = projects.join(",");
+  await User.update(
+    {
+      projects: newProjectsStr,
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+
+  ctx.body = {
+    msg: "add success",
+  };
+
+  await next();
+});
+
+router.put("/save", async (ctx, next) => {
+  let {
+    request: {
+      fields: { id, data },
+    },
+  } = ctx;
+
+  await Project.update(
+    {
+      data: JSON.stringify(data),
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+
+  ctx.body = {
+    msg: "save success",
+  };
 
   await next();
 });
