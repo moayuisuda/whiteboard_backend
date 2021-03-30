@@ -1,8 +1,8 @@
 const router = require("koa-router")();
 const { SECRET } = require("../config");
 const jsonwebtoken = require("jsonwebtoken");
-const user = require('../model/user')
-const { User } = user
+const user = require("../model/user");
+const { User } = user;
 
 router.post("/login", async (ctx, next) => {
   let {
@@ -13,10 +13,10 @@ router.post("/login", async (ctx, next) => {
   // let registList = await query(`SELECT * FROM user WHERE email = "${email}"`);
   let regist = await User.findOne({
     where: {
-      email
+      email,
     },
-    raw: true
-  })
+    raw: true,
+  });
   if (!regist) await user.regist(email, password, visitorData);
 
   // let res = await query(
@@ -25,10 +25,10 @@ router.post("/login", async (ctx, next) => {
   let matchUser = await User.findOne({
     where: {
       email,
-      password
+      password,
     },
-    raw: true
-  })
+    raw: true,
+  });
 
   if (!matchUser) {
     // ctx.status = 404;
@@ -51,11 +51,33 @@ router.get("/info", async (ctx, next) => {
   // let res = await query(`SELECT * FROM user WHERE id = "${id}"`);
   let info = await User.findOne({
     where: {
-      id
+      id,
     },
-    raw: true
+    raw: true,
   });
   ctx.body = info;
+
+  await next();
+});
+
+router.put("/last-edit-project", async (ctx, next) => {
+  let id = ctx.req.decoded.id;
+  let projectId = ctx.request.fields.projectId;
+
+  await User.update(
+    {
+      "last-edit-project": projectId,
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+
+  ctx.body = {
+    msg: 'last-edit-project has changed'
+  }
 
   await next();
 });

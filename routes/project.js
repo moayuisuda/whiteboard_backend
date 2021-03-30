@@ -97,4 +97,47 @@ router.put("/save", async (ctx, next) => {
   await next();
 });
 
+router.delete("/dele/:id", async (ctx, next) => {
+  let {
+    req: {
+      decoded: { id: userId },
+    },
+    params: { id },
+  } = ctx;
+
+  console.log("asdasdasdsa", userId, id);
+
+  const user = await User.findOne({
+    where: {
+      id: userId,
+    },
+    raw: true,
+  });
+  let projects = user.projects.split(",");
+  projects.splice(projects.indexOf(id), 1);
+
+  await User.update(
+    {
+      projects: projects.join(","),
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+
+  await Project.destroy({
+    where: {
+      id,
+    },
+  });
+
+  ctx.body = {
+    msg: "delete success",
+  };
+
+  await next();
+});
+
 module.exports = router;
