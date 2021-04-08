@@ -10,7 +10,6 @@ router.post("/login", async (ctx, next) => {
       fields: { email, password, visitorData },
     },
   } = ctx;
-  // let registList = await query(`SELECT * FROM user WHERE email = "${email}"`);
   let regist = await User.findOne({
     where: {
       email,
@@ -19,9 +18,6 @@ router.post("/login", async (ctx, next) => {
   });
   if (!regist) await user.regist(email, password, visitorData);
 
-  // let res = await query(
-  //   `SELECT * FROM user WHERE email = "${email}" AND password = "${password}"`
-  // );
   let matchUser = await User.findOne({
     where: {
       email,
@@ -31,14 +27,17 @@ router.post("/login", async (ctx, next) => {
   });
 
   if (!matchUser) {
-    // ctx.status = 404;
+    ctx.status = 404
+    ctx.body = {
+      msg: 'password error'
+    }
   } else {
     ctx.body = {
       ...matchUser,
       token: jsonwebtoken.sign(
         { name: matchUser.email, id: matchUser.id }, // 加密userToken
         SECRET,
-        { expiresIn: "2h" }
+        { expiresIn: "8h" }
       ),
     };
   }
