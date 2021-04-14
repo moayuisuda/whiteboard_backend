@@ -105,8 +105,6 @@ router.delete("/dele/:id", async (ctx, next) => {
     params: { id },
   } = ctx;
 
-  console.log("asdasdasdsa", userId, id);
-
   const user = await User.findOne({
     where: {
       id: userId,
