@@ -8,7 +8,7 @@ router.put("/upload", async (ctx, next) => {
   } = ctx;
 
   const file = files[0];
-  let path = '/images' + v4() + "." + file.type.split("/")[1];
+  let path = '/images/' + v4() + "." + file.type.split("/")[1];
   const buffer = fs.readFileSync(file.path);
   fs.writeFileSync("./public" + path, buffer);
 
