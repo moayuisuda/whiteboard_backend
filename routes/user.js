@@ -65,7 +65,7 @@ router.put("/last-edit-project", async (ctx, next) => {
 
   await User.update(
     {
-      "last-edit-project": projectId,
+      "last_edit_project": projectId,
     },
     {
       where: {
@@ -75,7 +75,7 @@ router.put("/last-edit-project", async (ctx, next) => {
   );
 
   ctx.body = {
-    msg: 'last-edit-project has changed'
+    msg: 'last-edit-project has changed to ' + projectId
   }
 
   await next();

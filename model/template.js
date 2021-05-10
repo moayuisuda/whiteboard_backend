@@ -1,42 +1,28 @@
 module.exports.tempData = {
-  id: "INIT",
+  id: "TEMP",
   panelData: {
     panelOps: {
       zoom: 1,
-      x: -200,
-      y: -100,
+      x: 0,
+      y: 0,
     },
     chartData: [
       {
         id: "0",
-        value: "this is 0",
         type: "basic",
-        style: {
+        model: {
+          value: "",
           align: "center",
-          color: "#8c28ff",
+          color: "#FFFFFF",
           shape: "rect",
           border: "none",
+          size: "M",
         },
         bounds: {
-          x: 0,
-          y: 0,
-          w: 150,
-          h: 150,
-        },
-      },
-      {
-        id: "2",
-        value: "this is 2",
-        type: "basic",
-        style: {
-          shape: "rect",
-          border: "none",
-        },
-        bounds: {
-          x: 600,
-          y: 100,
-          w: 100,
-          h: 100,
+          x: 200,
+          y: 200,
+          w: 80,
+          h: 80,
         },
       },
     ],

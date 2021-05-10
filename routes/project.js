@@ -32,6 +32,9 @@ router.get("/project-list", async (ctx, next) => {
     where: {
       id: [...idList],
     },
+    order: [
+      ['count', 'ASC']
+    ],
     raw: true,
   });
 
