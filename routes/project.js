@@ -32,9 +32,7 @@ router.get("/project-list", async (ctx, next) => {
     where: {
       id: [...idList],
     },
-    order: [
-      ['count', 'ASC']
-    ],
+    order: [["count", "ASC"]],
     raw: true,
   });
 
@@ -95,6 +93,31 @@ router.put("/save", async (ctx, next) => {
 
   ctx.body = {
     msg: "save success",
+  };
+
+  await next();
+});
+
+router.put("/name", async (ctx, next) => {
+  let {
+    request: {
+      fields: { id, name },
+    },
+  } = ctx;
+
+  await Project.update(
+    {
+      name,
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+
+  ctx.body = {
+    msg: "name change success",
   };
 
   await next();

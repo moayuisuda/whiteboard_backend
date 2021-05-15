@@ -37,7 +37,7 @@ router.post("/login", async (ctx, next) => {
       token: jsonwebtoken.sign(
         { name: matchUser.email, id: matchUser.id }, // 加密userToken
         SECRET,
-        { expiresIn: "8h" }
+        { expiresIn: "24h" }
       ),
     };
   }
